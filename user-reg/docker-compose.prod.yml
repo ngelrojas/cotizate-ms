@@ -6,6 +6,8 @@ services:
       context: ./app
       dockerfile: Dockerfile.prod
     command: gunicorn api.wsgi:application --bind 0.0.0.0:9000
+    volumes:
+      - static_volume:/home/app/api/staticfiles
     expose:
       - 9000
     env_file:
@@ -31,3 +33,4 @@ services:
 
 volumes:
   postgres_data:
+  static_volume:
