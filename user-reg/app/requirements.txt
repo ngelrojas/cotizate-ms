@@ -1,0 +1,7 @@
+Django
+python-decouple
+djangorestframework
+django-cors-headers
+flake8
+psycopg2-binary
+gunicorn
