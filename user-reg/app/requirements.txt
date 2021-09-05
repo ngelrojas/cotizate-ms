@@ -2,6 +2,8 @@ Django
 python-decouple
 djangorestframework
 django-cors-headers
+djangorestframework-jwt
 flake8
 psycopg2-binary
 gunicorn
+six

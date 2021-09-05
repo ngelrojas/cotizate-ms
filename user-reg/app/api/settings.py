@@ -10,7 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
+import datetime
 from pathlib import Path
+from corsheaders.defaults import default_methods
+from corsheaders.defaults import default_headers
 from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -46,11 +49,15 @@ THRIDPARTY_APPS = [
     'corsheaders',
 ]
 
-API_APPS = []
+API_APPS = [
+    "core",
+    "users",
+]
 
 INSTALLED_APPS = LOCAL_APPS + THRIDPARTY_APPS + API_APPS
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -148,3 +155,86 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# CORS
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_METHODS = list(default_methods)
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://cotizate.com",
+    "http://www.cotizate.com",
+    "http://167.172.158.153:9002",
+]
+
+CORS_ORIGIN_WHITELIST = [
+    "http://localhost:3000",
+    "http://cotizate.com",
+    "http://www.cotizate.com",
+    "http://167.172.158.153:9002",
+]
+
+CSRF_COOKIE_NAME = "csrftoken"
+
+CSRF_TRUSTED_ORIGINS = (
+    "localhost:3000",
+    "cotizate.com",
+    "134.122.116.138:9002",
+)
+
+CORS_ALLOW_HEADERS = default_headers + (
+    "x-xsrf-token",
+    "HTTP_X_XSRF_TOKEN",
+    "X-ACCESS_TOKEN",
+    "content-type",
+    "accept",
+    "authorization",
+)
+# custom User
+AUTH_USER_MODEL = "core.user"
+
+# CONFIG JWT 
+JWT_AUTH = {
+    "JWT_SECRET_KEY": SECRET_KEY,
+    "JWT_VERIFY_EXPIRATION": True,
+    "JWT_EXPIRATION_DELTA": datetime.timedelta(seconds=4300),
+    "JWT_ALLOW_REFRESH": False,
+    "JWT_REFRESH_EXPIRATION_DELTA": datetime.timedelta(days=1),
+    "JWT_AUTH_HEADER_PREFIX": "Bearer",
+    "JWT_AUTH_COOKIE": None,
+}
+
+# LOGGING
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "[%(asctime)s.%(msecs)03d]%(levelname)s [%(name)s:%(lineno)s] %(message)s",
+            "datefmt": "%d/%b/%Y %H:%M:%S",
+        }
+    },
+    "simple": {"format": "%(levelname)s %(message)s"},
+    "handlers": {
+        "file": {
+            "level": "INFO",
+            "class": "logging.handlers.TimedRotatingFileHandler",
+            "filename": "log/user_register.log",
+            "when": "D",
+            "interval": 1,
+            "backupCount": 40,
+            "formatter": "verbose",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["file"],
+            "propagate": True,
+            "level": "INFO",
+        },
+        "app01": {
+            "handlers": ["file"],
+            "level": "INFO",
+        },
+    },
+}
