@@ -8,13 +8,13 @@ from core.encoder_tokens import make_user_token
 
 class UserSerializer(serializers.ModelSerializer):
     """model user serializer"""
-    
+
     class Meta:
         model = User
         fields = ("id", "first_name", "last_name", "email", "password", "deleted")
         extra_kwargs = {
             "password": {"write_only": True, "min_length": 5},
-            "deleted": {"write_only": True}
+            "deleted": {"write_only": True},
         }
         read_only_fields = ("id",)
 
@@ -35,22 +35,24 @@ class UserSerializer(serializers.ModelSerializer):
 
 class RecoveryPwdSerializer(serializers.ModelSerializer):
     """send to recovery password serializers"""
+
     email = fields.EmailField(validators=[EmailValidator()])
-    
+
     class Meta:
         model = User
         fields = ("email",)
-    
+
     def create(self, validate_data):
         """send email to recovery password"""
         user_instance = get_object_or_404(User, email=validate_data.get("email"))
-        uid = encode_user_id(user.id)
-        token = make_user_token(user)
+        # uid = encode_user_id(user_instance.id)
+        # token = make_user_token(user_instance)
         return user_instance
 
 
 class PwdConfirmSerializer(serializers.ModelSerializer):
     """confirm password from recovery password"""
+
     password = fields.CharField(
         style={"input_style": "password"},
         required=True,

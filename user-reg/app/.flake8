@@ -1,0 +1,9 @@
+[flake8]
+max-line-length = 90
+exclude = 
+    migrations,
+    __pycache__,
+    manage.py,
+    ./api/settings.py,
+    ./core/models.py,
+    management

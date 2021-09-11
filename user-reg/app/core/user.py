@@ -13,7 +13,7 @@ class UserManager(BaseUserManager):
         user.is_activate = False
         user.set_password(password)
         user.save(using=self._db)
-    
+
         return user
 
     def create_superuser(self, email, password):
@@ -28,7 +28,8 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
     """custom user model that supports using email instead of username"""
-    TYPE_USER = ((1, "contributor" ),(2, "creator"))
+
+    TYPE_USER = ((1, "contributor"), (2, "creator"))
     email = models.EmailField(max_length=255, unique=True)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)

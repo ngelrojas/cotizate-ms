@@ -26,6 +26,7 @@ services:
 
   nginx:
     build: ./nginx
+    container_name: 'nginx_user-reg'
     ports:
       - 9001:80
     depends_on:

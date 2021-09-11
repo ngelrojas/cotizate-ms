@@ -15,12 +15,12 @@ class Command(BaseCommand):
     def error(self, message):
         return self.stdout.write(self.style.ERROR(message))
 
-    def hanedle(self, *args, **options):
+    def handle(self, *args, **options):
         self.warning(
             "if something goes wrong after installations, \n"
             "please use develop environment: \n"
             "docker-compose exec api python manage.py flush"
-        ) 
+        )
         with transaction.atomic():
             try:
                 # create super user

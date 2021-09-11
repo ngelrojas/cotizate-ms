@@ -11,12 +11,11 @@ jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 
 
 class CustomLoginUser(JSONWebTokenSerializer):
-
     def validate(self, attrs):
         try:
             credentials = {
-                'email': attrs.get('email'),
-                'password': attrs.get('password')
+                "email": attrs.get("email"),
+                "password": attrs.get("password"),
             }
 
             if all(credentials.values()):
@@ -24,17 +23,15 @@ class CustomLoginUser(JSONWebTokenSerializer):
 
                 if user:
                     if not user.is_activate:
-                        msg = _('User account is not activated.')
+                        msg = _("User account is not activated.")
                         raise serializers.ValidationError(msg)
 
                     payload = jwt_payload_handler(user)
 
-                    return {
-                        'token': jwt_encode_handler(payload)
-                    }
+                    return {"token": jwt_encode_handler(payload)}
 
                 else:
-                    msg = _('Unable to log in with provided credentials')
+                    msg = _("Unable to log in with provided credentials")
                     raise serializers.ValidationError(msg)
             else:
                 msg = _('Must include "{email_field}" and "password".')
@@ -49,8 +46,10 @@ class CustomLoginUser(JSONWebTokenSerializer):
             # Here we have to raise an APIException (status code 500)
             # if something that's not a validation error is caught
             # in the try block.
-            raise APIException({
-                'data': 'error',
-                'sg': 'An unexpected error ocurred',
-                'detail': format(ex),
-            })
+            raise APIException(
+                {
+                    "data": "error",
+                    "sg": "An unexpected error ocurred",
+                    "detail": format(ex),
+                }
+            )
